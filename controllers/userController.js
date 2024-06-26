@@ -22,8 +22,8 @@ class UserController {
         }
         const hashPassword = await bcrypt.hash(password, 5)
         const user = await User.create({login,name, role, password: hashPassword})
-        const token = generateJwt(user.id, user.login, user.role, user.name)
-        return res.json({token,name: user.name  })
+        const token = generateJwt(user.id, user.login, user.role)
+        return res.json({token})
         
     }
 
@@ -38,8 +38,8 @@ class UserController {
             if (!comparePassword) {
                 return res.status(401).json({message: 'Указан неверный пароль'})
             }
-            const token = generateJwt(user.id, user.login, user.role, user.name, user.detail_id  )
-            return res.json({token, name: user.name, role: user.role, user: user.id, detail_id: user.detail_id})
+            const token = generateJwt(user.id, user.login, user.role)
+            return res.json({token, role: user.role, user: user.id })
         } catch (error) {
             next(error)
         }
